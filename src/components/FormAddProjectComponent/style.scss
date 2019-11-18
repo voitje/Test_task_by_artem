@@ -1,0 +1,19 @@
+.form-add {
+  display: flex;
+
+  &_name, &_description, &_link {
+    margin-right: 10px;
+    &_text {
+
+    }
+    &_input {
+      margin-left: 5px;
+    }
+  }
+  &_button-add {
+    background-color: blueviolet;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+}
