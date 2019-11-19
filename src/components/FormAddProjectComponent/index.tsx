@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { connect} from 'react-redux';
+import store, {IState} from '../../store/createStore'
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import './style.scss';
-import {AppState} from "../../store/reducer/rootReducer";
 import {createProject} from "../../store/action/projectActions";
+import {IProject, ProjectActionTypes} from "../../store/project/types";
 
 interface IFormAddState {
   name: string,
@@ -11,8 +12,12 @@ interface IFormAddState {
   link: string,
 }
 
-class FormAdd extends React.Component<any, IFormAddState> {
+ interface IFormProps {
+    project: IProject;
+    test: (newProject:IProject) =>ProjectActionTypes
+}
 
+class FormAdd extends React.Component<IFormProps, IFormAddState> {
   state: IFormAddState = {
     name: '',
     description: '',
@@ -31,13 +36,24 @@ class FormAdd extends React.Component<any, IFormAddState> {
     this.setState({link: e.target.value});
   };
 
+  addNewProject = () => {
+      let newProject : IProject = {
+          name: this.state.name,
+          description: this.state.description,
+          link: this.state.link,
+      };
+      this.props.test(newProject);
+      this.setState({name: '', description: '', link: ''})
+  };
+
   render() {
-    console.log(this.state);
+    console.log(this.props.project);
     return (
         <div className='form-add'>
             <div className='form-add_name'>
               <span className='form-add_name_text'>NAME:</span>
               <input
+                  value={this.state.name}
                   className='form-add_name_input'
                   type="text"
                   placeholder="Enter name..."
@@ -46,35 +62,39 @@ class FormAdd extends React.Component<any, IFormAddState> {
             <div className='form-add_description'>
               <span className='form-add_description_text'>DESCRIPTION:</span>
               <input
+                  value={this.state.description}
                   className='form-add_description_input'
-                  type="text" placeholder="Enter name..."
+                  type="text"
+                  placeholder="Enter description..."
                   onChange={this.handleFormChangeDescription}
               />
             </div>
             <div className='form-add_link'>
               <span className='form-add_link_text'>LINK:</span>
               <input
+                  value={this.state.link}
                   className='form-add_link_input'
-                  type="text" placeholder="Enter name..."
+                  type="text"
+                  placeholder="Enter link..."
                   onChange={this.handleFormChangeLink}
               />
             </div>
-            <button  className="form-add_button-add"> Add project</button>
+            <button type="submit" onClick={this.addNewProject} className="form-add_button-add"> Add project</button>
         </div>
     )
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
-    projects: state.project.projects,
+const mapStateToProps = (state: IState) => ({
+    project: state.project,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
     bindActionCreators(
         {
-            createProject
+            test: createProject
         },
         dispatch
     );
 
-export default FormAdd;
+export default connect(mapStateToProps, mapDispatchToProps)(FormAdd);

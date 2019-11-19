@@ -4,12 +4,15 @@ import logo from './logo.svg';
 import './App.css';
 import DropDown from "./components/DropDown";
 import FormAdd from "./components/FormAddProjectComponent";
+import store from "./store/createStore";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <FormAdd/>
-    </div>
+      <Provider store={store}>
+        <div className="App">
+          <FormAdd/>
+        </div>
+      </Provider>
   )
 };
 

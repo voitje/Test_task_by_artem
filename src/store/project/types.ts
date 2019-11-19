@@ -1,18 +1,15 @@
 import {EReduxActionTypes} from "../action/constants";
 
-export interface Project {
+export interface IProject {
     name: string
     description: string
     link: string
 }
 
-export interface ProjectState {
-    projects: Project[]
-}
 
 interface CreateProjectAction {
     type: typeof EReduxActionTypes.CREATE_PROJECT
-    payload: Project
+    payload: IProject
 }
 
 export type ProjectActionTypes = CreateProjectAction

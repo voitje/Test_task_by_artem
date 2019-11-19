@@ -1,7 +1,7 @@
 import {EReduxActionTypes} from "./constants";
-import {Project, ProjectActionTypes} from "../project/types";
+import {IProject, ProjectActionTypes} from "../project/types";
 
-export function createProject(newProject: Project) : ProjectActionTypes {
+export function createProject(newProject: IProject) : ProjectActionTypes {
     return {
         type: EReduxActionTypes.CREATE_PROJECT,
         payload: newProject
