@@ -1,9 +1,9 @@
 import { createStore } from 'redux';
 import rootReducer from './reducer/rootReducer';
-import {IProject} from "./project/types";
+import {IProjects} from "./project/types";
 
 export interface IState {
-    project: IProject
+    projects: IProjects
 }
 
 const store = createStore(

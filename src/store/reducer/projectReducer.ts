@@ -1,24 +1,17 @@
 import { EReduxActionTypes } from "../action/constants";
-import {ProjectActionTypes, IProject} from "../project/types";
+import {ProjectActionTypes, IProject, IProjects} from "../project/types";
 
-const initialState: IProject = {
-
-        name: '',
-        description: '',
-        link: ''
-
-
-};
+const initialState: IProjects = [];
 
 export function projectReducer(
     state = initialState,
     action: ProjectActionTypes
-): IProject {
+): IProjects {
     switch (action.type) {
         case EReduxActionTypes.CREATE_PROJECT:
-            return {
-               ...state, ...action.payload
-            }
+            return [
+               ...state, action.payload,
+            ];
         default:
             return state
     }

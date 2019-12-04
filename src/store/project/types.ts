@@ -1,4 +1,4 @@
-import {EReduxActionTypes} from "../action/constants";
+import { EReduxActionTypes } from "../action/constants";
 
 export interface IProject {
     name: string
@@ -6,6 +6,7 @@ export interface IProject {
     link: string
 }
 
+export type IProjects = IProject[];
 
 interface CreateProjectAction {
     type: typeof EReduxActionTypes.CREATE_PROJECT

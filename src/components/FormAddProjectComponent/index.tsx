@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect} from 'react-redux';
-import store, {IState} from '../../store/createStore'
+import  {IState} from '../../store/createStore'
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import './style.scss';
 import {createProject} from "../../store/action/projectActions";
-import {IProject, ProjectActionTypes} from "../../store/project/types";
+import {IProject, IProjects, ProjectActionTypes} from "../../store/project/types";
 
 interface IFormAddState {
   name: string,
@@ -13,7 +13,7 @@ interface IFormAddState {
 }
 
  interface IFormProps {
-    project: IProject;
+    projects?: IProjects;
     test: (newProject:IProject) =>ProjectActionTypes
 }
 
@@ -47,7 +47,7 @@ class FormAdd extends React.Component<IFormProps, IFormAddState> {
   };
 
   render() {
-    console.log(this.props.project);
+    console.log('PROJECTS', this.props.projects);
     return (
         <div className='form-add'>
             <div className='form-add_name'>
@@ -86,7 +86,7 @@ class FormAdd extends React.Component<IFormProps, IFormAddState> {
 }
 
 const mapStateToProps = (state: IState) => ({
-    project: state.project,
+    projects: state.projects,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>

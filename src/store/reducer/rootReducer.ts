@@ -3,7 +3,7 @@ import {EReduxActionTypes} from "../action/constants";
 import {projectReducer} from "./projectReducer";
 
 const rootReducer = combineReducers({
-    project: projectReducer
+    projects: projectReducer
 });
 
 export default rootReducer;
