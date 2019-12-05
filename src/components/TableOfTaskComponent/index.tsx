@@ -4,18 +4,26 @@ import './style.scss';
 import ContentEditable from 'react-contenteditable'
 import {FormEvent, useState} from 'react';
 import {FormEventHandler} from "react";
-
+import {ArrayActionTypes, IArray} from "../../store/project/types";
+import {IState} from "../../store/createStore";
+import {Dispatch, AnyAction, bindActionCreators} from 'redux'
+import {updateArray} from "../../store/action/projectActions";
 let countRow = 0;
 
 
+interface IArrayProps {
+    array?: IArray;
+    updateArray: (newArray: IArray) => ArrayActionTypes
+}
+
 interface ICell {
-    text: string
+    text: string | null
 }
 
 // @ts-ignore
-const TableOfTask : React.FC<>= () => {
+const TableOfTask : React.FC<IArrayProps>= (props) => {
 
-    const [value, setValue] = useState<string>('');
+    const [value, setValue] = useState<string | null>('');
     const [array, setArray] = useState<ICell[]>([]);
     let arrayOfCell = value;
     const handleChange = (e: React.FormEvent<HTMLDivElement>) => {
@@ -36,28 +44,28 @@ const TableOfTask : React.FC<>= () => {
     const renderRow = () => {
 
         let test = [];
-        for (let i = 0; i < 3; i++)
-        {
+        for (let i = 0; i < 3; i++) {
             test.push(renderCell(false))
         }
-        for (let i = 3; i < 8; i++)
-        {
+        for (let i = 3; i < 8; i++) {
             test.push(renderCell(true))
         }
-        return(
+        return (
             <div className="divTableRow">
                 {test.map((item) => item)}
             </div>
         )
     };
 
-    const renderCell  = (renderTwo : boolean) => {
+    const renderCell = (renderTwo: boolean) => {
         if (renderTwo) {
             return (
                 <div className='zhopa' style={{"display": "table-cell"}}>
                     <div
-                        style={{"display": "inline-flex",
-                            width:'100%', height: '100%', border: '1px dashed'}}
+                        style={{
+                            "display": "inline-flex",
+                            width: '100%', height: '100%', border: '1px dashed'
+                        }}
                     >
                         <ContentEditable
                             id="editableDiv"
@@ -76,8 +84,7 @@ const TableOfTask : React.FC<>= () => {
                     </div>
                 </div>
             )
-        }
-        else {
+        } else {
             return (
                 <ContentEditable
                     id="editableDiv"
@@ -92,11 +99,10 @@ const TableOfTask : React.FC<>= () => {
     const renderRow1 = () => {
 
         let test = [];
-        for (let i = 0; i < 13; i++)
-        {
+        for (let i = 0; i < 13; i++) {
             test.push(renderCell1())
         }
-        return(
+        return (
             <tr>
                 {test.map((item) => <td>{item}</td>)}
             </tr>
@@ -112,16 +118,28 @@ const TableOfTask : React.FC<>= () => {
 // />
 
 
-
-    const renderCell1  = () => {
+    const renderCell1 = () => {
         return (
             <div className="pythonGovno" contentEditable/>
         )
     };
 
-    const testHandle = (e: Event) => {
-        console.log('AAA', e.target)
-    }
+    const testHandle = (e: InputEvent) => {
+        console.log('AAA', e);
+        let a = [];
+        let b = [[]];
+        // @ts-ignore
+
+        a.push(e.data);
+        // @ts-ignore
+        b.push(a);
+        // @ts-ignore
+        b[0].push('a')
+        console.log(a);
+        props.updateArray(b);
+        setValue(e.data);
+        console.log('PROPSARRAY', props.array);
+    };
 
     const addNewRow = () => {
         // @ts-ignore
@@ -131,8 +149,10 @@ const TableOfTask : React.FC<>= () => {
         let countTd = document.getElementById('subhead')
             .getElementsByTagName('td').length;
         let row = table.insertRow();
-        let asd = React.createElement('div', {className: "pythonGovno",
-             contentEditable: 'true'});
+        let asd = React.createElement('div', {
+            className: "pythonGovno",
+            contentEditable: 'true'
+        });
         for (let i = 0; i < countTd; i++) {
             let newDiv = document.createElement('div');
             newDiv.className = "pythonGovno";
@@ -141,7 +161,10 @@ const TableOfTask : React.FC<>= () => {
             //newDiv.onChange = handleChange();
 
             newDiv.contentEditable = 'true';
-            newDiv.addEventListener("input", (e) => {testHandle(e)});
+            // @ts-ignore
+            newDiv.addEventListener("input", (e: InputEvent) => {
+                testHandle(e)
+            });
 
             // @ts-ignore
             let cell = row.insertCell(i).appendChild(newDiv);
@@ -155,8 +178,8 @@ const TableOfTask : React.FC<>= () => {
     };
 
 
-        return(
-            <div>
+    return (
+        <div>
             <div className="divTable">
                 <div className="divTableBody">
                     <div className="divTableRow">
@@ -228,62 +251,75 @@ const TableOfTask : React.FC<>= () => {
                     {renderRow()}
                 </div>
             </div>
-                <div className="table-of-task">
-                    <table id="table-task">
-                        <thead>
-                            <tr>
-                                <th>module</th>
-                                <th>name</th>
-                                <th>comment</th>
-                                <th colSpan={2}>designer</th>
-                                <th colSpan={2}>Frontend</th>
-                                <th colSpan={2}>Backend</th>
-                                <th colSpan={2}>iOS</th>
-                                <th colSpan={2}>Android</th>
-                            </tr>
-                            <tr id="subhead">
-                                <td>a </td>
-                                <td>a </td>
-                                <td>a </td>
-                                <td>пос</td>
-                                <td>нег</td>
-                                <td>пос</td>
-                                <td>нег</td>
-                                <td>пос</td>
-                                <td>нег</td>
-                                <td>пос</td>
-                                <td>нег</td>
-                                <td>пос</td>
-                                <td>нег</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                    <div className="buttons-action">
-                        <input
-                            className="button-add"
-                            type="button"
-                            value="+"
-                            onClick={addNewRow}
-                        />
-                        <input
-                            className="button-delete"
-                            type="button"
-                            value="-"
-                            onClick={deleteLastRow}
-                        />
-                        <input
-                            className="button-save"
-                            type="button"
-                            value="SAVE"
-                            onClick={addData}
-                        />
-                    </div>
+            <div className="table-of-task">
+                <table id="table-task">
+                    <thead>
+                    <tr>
+                        <th>module</th>
+                        <th>name</th>
+                        <th>comment</th>
+                        <th colSpan={2}>designer</th>
+                        <th colSpan={2}>Frontend</th>
+                        <th colSpan={2}>Backend</th>
+                        <th colSpan={2}>iOS</th>
+                        <th colSpan={2}>Android</th>
+                    </tr>
+                    <tr id="subhead">
+                        <td>a</td>
+                        <td>a</td>
+                        <td>a</td>
+                        <td>пос</td>
+                        <td>нег</td>
+                        <td>пос</td>
+                        <td>нег</td>
+                        <td>пос</td>
+                        <td>нег</td>
+                        <td>пос</td>
+                        <td>нег</td>
+                        <td>пос</td>
+                        <td>нег</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div className="buttons-action">
+                    <input
+                        className="button-add"
+                        type="button"
+                        value="+"
+                        onClick={addNewRow}
+                    />
+                    <input
+                        className="button-delete"
+                        type="button"
+                        value="-"
+                        onClick={deleteLastRow}
+                    />
+                    <input
+                        className="button-save"
+                        type="button"
+                        value="SAVE"
+                        onClick={addData}
+                    />
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
+};
+
+const mapStateToProps = (state: IState) =>({
+    array: state.array
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
+    bindActionCreators(
+        {
+            updateArray: updateArray
+        },
+        dispatch
+    );
 
 
-export default TableOfTask;
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableOfTask);

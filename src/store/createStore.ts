@@ -1,9 +1,10 @@
 import { createStore } from 'redux';
 import rootReducer from './reducer/rootReducer';
-import {IProjects} from "./project/types";
+import {IArray, IProjects} from "./project/types";
 
 export interface IState {
-    projects: IProjects
+    projects: IProjects,
+    array: [[]]
 }
 
 const store = createStore(

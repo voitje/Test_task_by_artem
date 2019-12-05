@@ -14,3 +14,13 @@ interface CreateProjectAction {
 }
 
 export type ProjectActionTypes = CreateProjectAction
+
+export type IArray = Array<Array<String>>;
+
+interface UpdateArrayAction {
+    type: typeof EReduxActionTypes.UPDATE_ARRAY
+    payload: IArray
+}
+
+export type ArrayActionTypes = UpdateArrayAction;
+
