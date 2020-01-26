@@ -1,16 +1,27 @@
 import {EReduxActionTypes} from "./constants";
-import {ArrayActionTypes, IArray, IProject, ProjectActionTypes} from "../project/types";
+import {ArrayActionTypes, IArray, IProject, ProjectActionTypes as PAT} from "../project/types";
 
-export function createProject(newProject: IProject) : ProjectActionTypes {
-    return {
-        type: EReduxActionTypes.CREATE_PROJECT,
-        payload: newProject
+const entity = 'PROJECT';
+
+export const ProjectActionTypes = {
+    CREATE_PROJECT: `${entity}.CREATE_PROJECT`,
+    UPDATE_ARRAY: `${entity}.UPDATE_ARRAY`,
+};
+
+class ProjectActions {
+    static createProject(newProject: IProject) : PAT {
+        return {
+            type: EReduxActionTypes.CREATE_PROJECT,
+            payload: newProject
+        }
+    }
+
+    static updateArray = (newArray: IArray) : ArrayActionTypes => {
+        return {
+            type: EReduxActionTypes.UPDATE_ARRAY,
+            payload: newArray
+        }
     }
 }
 
-export const updateArray = (newArray: IArray) : ArrayActionTypes => {
-    return {
-        type: EReduxActionTypes.UPDATE_ARRAY,
-        payload: newArray
-    }
-};
+export default ProjectActions;

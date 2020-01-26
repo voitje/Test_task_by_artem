@@ -13,6 +13,6 @@ export function projectReducer(
                ...state, action.payload,
             ];
         default:
-            return state
+            return state;
     }
 }

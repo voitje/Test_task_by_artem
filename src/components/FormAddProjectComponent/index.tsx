@@ -3,7 +3,7 @@ import { connect} from 'react-redux';
 import  {IState} from '../../store/createStore'
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import './style.scss';
-import {createProject} from "../../store/action/projectActions";
+import ProjectActions from "../../store/action/projectActions";
 import {IProject, IProjects, ProjectActionTypes} from "../../store/project/types";
 
 interface IFormAddState {
@@ -92,7 +92,7 @@ const mapStateToProps = (state: IState) => ({
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
     bindActionCreators(
         {
-            test: createProject
+            test: ProjectActions.createProject,
         },
         dispatch
     );

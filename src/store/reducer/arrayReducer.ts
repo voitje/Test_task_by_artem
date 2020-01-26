@@ -10,7 +10,7 @@ export const arrayReducer = (
     switch (action.type) {
         case EReduxActionTypes.UPDATE_ARRAY:
             console.log('PYTHONGONVO', action.payload);
-            return action.payload
+            return action.payload;
         default:
             return state;
     }
