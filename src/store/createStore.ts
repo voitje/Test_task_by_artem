@@ -4,7 +4,7 @@ import {IArray, IProjects} from "./project/types";
 
 export interface IState {
     projects: IProjects,
-    array: [[]]
+    gradingTable: [][]
 }
 
 const store = createStore(

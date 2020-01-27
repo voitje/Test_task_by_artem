@@ -1,12 +1,11 @@
-import {EReduxActionTypes} from "./constants";
-import {ArrayActionTypes, IArray, IProject, ProjectActionTypes as PAT} from "../project/types";
-
-const entity = 'PROJECT';
-
-export const ProjectActionTypes = {
-    CREATE_PROJECT: `${entity}.CREATE_PROJECT`,
-    UPDATE_ARRAY: `${entity}.UPDATE_ARRAY`,
-};
+import {EReduxActionTypes, ProjectActionTypes} from "./constants";
+import {
+    ArrayActionTypes,
+    IArray,
+    IProject,
+    ProjectActionTypes as PAT,
+    GradingTableActionTypes
+} from "../project/types";
 
 class ProjectActions {
     static createProject(newProject: IProject) : PAT {
@@ -19,6 +18,13 @@ class ProjectActions {
     static updateArray = (newArray: IArray) : ArrayActionTypes => {
         return {
             type: EReduxActionTypes.UPDATE_ARRAY,
+            payload: newArray
+        }
+    };
+
+    static saveGradingTable = (newArray: IArray) : GradingTableActionTypes => {
+        return {
+            type: ProjectActionTypes.SAVE_ARRAY,
             payload: newArray
         }
     }

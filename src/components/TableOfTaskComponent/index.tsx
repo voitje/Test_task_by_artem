@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector, useStore} from 'react-redux';
 import './style.scss';
 import ContentEditable from 'react-contenteditable'
 import {FormEvent, useState, useRef, useEffect} from 'react';
@@ -20,17 +20,24 @@ interface ICell {
 
 // @ts-ignore
 const TableOfTask : React.FC<IArrayProps>= (props) => {
-  const _array = useSelector((state: IState) => state.array);
+  //const _array = useSelector((state: IState) => state.array);
+
+  const arrayGradingTable = useSelector((state: IState) => state.gradingTable);
+  const arrayProjects = useSelector((state: IState) => state.projects);
 
   const dispatch = useDispatch();
   const updateArray = (newArray: IArray) => dispatch(ProjectActions.updateArray(newArray));
 
+  const  {getState} = useStore();
 
   const [value, setValue] = useState<string | null>('');
   const [cells, setCells] = useState<ICell[]>([]);
 
   /** Массив из массивов, в котором значения в ячейках*/
-  const [arrayCell, setArrayCell] = useState<[Object[]]>([[]]);
+  const [arrayCell, setArrayCell] = useState<Object[][]>([]);
+
+  /** test variant by george SHPAK*/
+  const [tableArray, setTableArray] = useState<Object[]>([]);
 
   const [countRows, setCountRows] = useState<number>(0);
   const [rows, setRows] = useState<JSX.Element[][] | null>(null);
@@ -43,11 +50,6 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
     let table = document.getElementById("table-task")
       .getElementsByTagName('tbody')[0];
 
-  };
-
-  const addData = () => {
-    const newArray: ICell[] = [...cells, {text: value}];
-    setCells(newArray);
   };
 
   const renderRow = () => {
@@ -198,6 +200,7 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
   };
 
   const createRow = () => {
+
     // @ts-ignore
     let count = subhead.current.cells.length;
     let newRow: JSX.Element[] = [];
@@ -213,7 +216,7 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
         }
       );
     }
-    console.log('PERED', arrayCell);
+
     // (!arrayCell[0].length)
     //   ? setArrayCell([[...newRowString]])
     //   : setArrayCell(prevState => {
@@ -221,12 +224,60 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
     //     return prevState
     //   });
     setArrayCell(prevState => {
-      prevState.push(newRowString);
-      return prevState
+      return [...prevState, newRowString]
     });
     setCountRows(prevState =>  {return prevState + 1 });
-    console.log('arrayCell', arrayCell)
+
+    let newRowTest = {
+      module: '',
+      name: '',
+      comment: '',
+      designer: {
+        pos: '',
+        neg: ''
+      },
+      frontend: {
+        pos: '',
+        neg: ''
+      },
+      backend: {
+        pos: '',
+        neg: ''
+      },
+      ios: {
+        pos: '',
+        neg: ''
+      },
+      android: {
+        pos: '',
+        neg: ''
+      },
+    };
+
   };
+
+
+  // const row = {
+  //   module: 0,
+  //   name: 1,
+  //   comment: 2,
+  //
+  //   designerPos: 3,
+  //   designerNeg: 3,
+  //   // or
+  //   designer: {
+  //     pos: 3,
+  //     neg: 4
+  //   },
+  // };
+  //
+  // const array = [];
+  // array.push(row);
+  // array.push(row);
+  // array.push(row);
+  //
+  // console.log('ARRAY', array);
+
 
   const getRows = () => {
     if (arrayCell) {
@@ -253,7 +304,6 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
       });
     }
     else {
-      console.log('NET', arrayCell);
       return(
       <div>PUSTO</div>
       )
@@ -285,22 +335,23 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
   };
 
   const deleteLastRow = () => {
-    // @ts-ignore
-    // document.getElementById('table-task').deleteRow(document.getElementsByTagName('tbody')[0]
-    //   .getElementsByTagName('tr').length + 1);
-
-    setArrayCell(prevState => {
-      prevState.pop();
-      return prevState
-    });
+    let newArrayCell = arrayCell;
+    newArrayCell.pop();
+    setArrayCell([...newArrayCell]);
     setCountRows(prevState => prevState - 1);
+  };
+
+  const saveData = () => {
+    dispatch(ProjectActions.saveGradingTable(arrayCell));
+    console.log('STORE', getState().array)
+    console.log('STORE_ARRAY',arrayGradingTable);
+    //console.log('store_projects', arrayProjects);
   };
 
   useEffect(
     () => {
-      console.log('CALLBACK', arrayCell, countRows);}, [arrayCell]
+      }, [arrayCell]
   );
-  // @ts-ignore
   return (
     <div>
       <div className="divTable">
@@ -450,7 +501,7 @@ const TableOfTask : React.FC<IArrayProps>= (props) => {
             className="button-save"
             type="button"
             value="SAVE"
-            onClick={addData}
+            onClick={saveData}
           />
         </div>
       </div>

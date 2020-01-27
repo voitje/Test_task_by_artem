@@ -1,17 +1,16 @@
-import {ArrayActionTypes, IArray} from "../project/types";
-import {EReduxActionTypes} from "../action/constants";
+import {ArrayActionTypes, IArray, GradingTableActionTypes} from "../project/types";
+import {EReduxActionTypes, ProjectActionTypes} from "../action/constants";
 
-const initialState : IArray = [[], []];
+const initialState : IArray = [];
 
-export const arrayReducer = (
-    state: IArray = initialState,
-    action: ArrayActionTypes
+export const arrayReducer  = (
+  state = initialState,
+  action: GradingTableActionTypes
 ) => {
     switch (action.type) {
-        case EReduxActionTypes.UPDATE_ARRAY:
-            console.log('PYTHONGONVO', action.payload);
-            return action.payload;
+        case ProjectActionTypes.SAVE_ARRAY:
+            return [...action.payload];
         default:
-            return state;
+          return state;
     }
-}
+};
